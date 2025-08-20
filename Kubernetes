@@ -1,0 +1,142 @@
+Day 12 
+
+
+Kubernetes K8S cluster diagram.(in screenshot)
+
+Application run on worker node
+ETCD run on control plane node
+
+KUBERNETES
+
+Deploy 3 instances in aws 
+1st instance (MASTER NODE)(2 CORE 2Gb ram) - ubuntu 22.04 -> t2 medium -> create key & security group -> 15Gb space -> launch instance
+2nd instance (WORKER NODE)(1 core 1Gb ram) - ubuntu 22.04 -> select key & security group -> t2.micro -> 10Gb -> launch instance
+3rd instance (WORKER NODE)(1 core 1Gb ram) - ubuntu 22.04 -> select key & security group -> t2.micro -> 10Gb -> launch instance
+
+vim/etc/hosts -> setup DNS for all 3 machine in every machine
+i.e., IP address(private)	Name
+
+
+DISABLE SWAP SPACE IN MASTER NODE
+swapoff -s
+
+apt update -y
+allow kubeadm required ports in the security group - 
+https://kubernetes.io/docs/reference/networking/ports-and-protocols/
+Add control plane & worker node ports both in the security group
+
+
+Go to sir's git repo for Kubernetes installation steps
+
+https://github.com/sanjayguruji/Sanjaya-K8S-Code/blob/main/k8s-installtion-with-containerd-on-ubuntu%2024.04
+
+Follow steps to install
+
+kubeadm init (only to be used on control plane node - one time -> this machine will act as kubeadm or the master node)
+
+Copy & paste the token from the description given post installation
+
+kubeadm join 172.31.83.29:6443 --token c4nx6u.69oo5e03j18z3rue \
+        --discovery-token-ca-cert-hash sha256:55e809cb6295a249ca99ba7d800680b767cac4db4a4b8d5a1a697ee9b33a6e76
+
+	
+NOW IN THE WORKER NODES
+above steps then
+EXCEPT init all the commands run
+
+
+vim /etc/containerd/config.toml
+Go to line 139 - true (SystemCgroup)
+systemctl restart containerd
+
+systemctl status kubelet
+paste the token
+and it will join
+
+
+GO TO CONTROL PLANE
+kubectl get nodes
+you will see the node
+
+kubectl get pods -A
+
+go to sir's repo and configure pod network command do it only on control plane
+then the next command
+
+kubectl get node -> status will show ready
+
+---------------------------------------------------------------------------
+
+kubectl get pod -A (all the pods created while configuration)
+cd /etc/Kubernetes/manifests
+ll
+etcd.yml is the database -> it contains server IP and other imp data
+
+cat admin.conf -> to check the user by default kubernetes-admin
+
+---------------------------------------------------------------------------
+
+pods ->
+
+mkdir /k8s-code
+
+cd /k8s-code
+vim myfirstpod.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+
+
+save and exit
+kubectl apply -f myfirstpod.yaml
+kubectl get pod
+container will be live
+
+
+kubectl describe pod nginx (tells about the status and details)
+
+cp myfirstpod.yaml secondpod.yaml
+
+vim secondpod.yaml
+name to web-app
+kubectl apply -f secondpod.yaml
+
+kubectl get pod
+
+Types of QoS
+	Best Effort -> No resource limit -> can be deleted if other pod is 			present
+	Burstable -> some limit
+	Guaranteed -> high limit - guaranteed execution no deletion (when 			both request and limit are same)
+Get QOS yaml code from Kubernetes QOS website
+
+
+To create burstable pod
+check ss - 16:50
+
+To check and see the ip and status
+kubectl get pod -o wide -> ip of pods
+kubectl get node -o wide -> ip of nodes i.e., workers, control plane
+
+kubectl get pod
+
+To delete a pod
+kubectl delete pod podname
+
+Dont deploy multiple container in a single pod
+deploy pod independently in a container
+
+kubectl describe pod podname
+
+kubectl apply -f mypod.yaml
+again the deleted pod will be created if you give its yaml file name and apply to start
+
+
+
