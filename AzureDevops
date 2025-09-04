@@ -1,0 +1,69 @@
+Day 19
+
+Azure DevOps
+Certifications: Azure 104- Alan Rodrigus, Azure AG 400
+Kubernetes - CKA (kode kloud youtube)
+
+Create a VM
+
+Go to Microsoft Intra ID (its like IAM)
+create new user
+give name
+Go to assignment if role is to be given
+or else review and create
+
+select the user => go to user setting
+
+
+Go to subscription
+select your subscriptuon
+Access control (IAM)
+add and select the member
+create the user
+again select the user
+add custom role
+azure administrator access
+
+login the azure with that user id
+
+create resource group
+
+then go to Kubernetes service
+click on create
+select Kubernetes cluster
+select resource group
+cluster preset config = dev/test
+select zone 1,2
+version keep it default 1.32.6
+
+automatic upgrade enable with stable -> every week on sunday
+
+next
+node pools
+add node pool
+add a vm node pool
+select and name it
+
+os sku - ubuntu
+add vm size
+B series -> b2s
+count 3
+next
+
+max pods per node - 30
+review and create
+
+then after it is live
+connect via open shell
+
+create a instance 
+connect
+install azure cli
+
+Now go to AKS
+now az login
+go to url
+login --tenant command paste the default id
+then first command from website
+then install aks
+then second command from website
