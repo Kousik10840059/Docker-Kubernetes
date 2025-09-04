@@ -1,0 +1,106 @@
+Proj
+
+till tomcat do
+
+then create a aws machine named dockerhost
+install docker
+
+Docker - integration
+
+In Jenkins install -> publish over ssh plugins
+install and restart Jenkins
+
+
+Go to docker machine and also in Jenkins server
+
+vim /etc/ssh/sshd_config 
+yes to line 40 & 65
+
+systemctl restart sshd
+enable sshd
+
+in Jenkins and docker
+set root passwd
+
+to login to docker ssh root@ipofdocker
+
+go to jenkins- setting
+
+
+system build over ssh
+hostname - Jenkins ip
+username -root
+tick to set password based
+then test configuration
+apply and save
+
+
+go to manage Jenkins
+system
+publish over ssh
+add ssh server
+name -docker
+hostname-iop
+username root
+tick to use password
+test config
+apply save
+
+
+ssh-keygen on both Jenkins and docker
+
+on jenkins
+ssh-copy-id root@ipofdocker
+on docker
+ssh-copy-id root@ipofjenkins
+
+in docker
+yum install awscli* -y
+IAM user -> full access
+create access key
+aws configure
+
+
+
+
+on Jenkins machine
+cd /var/lib/Jenkins/workspace
+ll 
+cd to directory
+pwd
+
+
+go to Jenkins -> configure post build action
+send build over ssh
+source file : /
+exec command
+rsync-avh/var/lib/jenkins/workspace/nameofdir/*root@ipofdockerhost:/opt
+build now
+
+in docker 
+cd /opt/
+ll
+
+
+=-------------------------
+
+go to aws
+search ECR
+create
+give name
+create
+open the ecr
+view push command
+
+go to Jenkins -> build -> configure
+post build action
+add server
+docker
+exec command
+cd /opt
+copy paste the command from view push command
+save and apply
+
+
+
+
