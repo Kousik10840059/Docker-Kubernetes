@@ -1,0 +1,51 @@
+AFTER ECR
+
+Host an instance for eks
+allow port 8080
+connect it with terminal
+
+connect the IAM user
+aws configure
+
+attach role - modify IAM roles attach it with instance
+
+sir's repo eks-cluster-creating
+
+set root password
+------
+vim /etc/ssh/sshd_config 40,65
+restart enable sshd
+
+Go to Jenkins -> system
+add ssh server
+name- eks-node
+root
+
+advance password based
+
+setup ssh between docker and eks-node
+
+ssh-copy-id root@ip-viceversa
+
+
+THEN TRANSFER FILE from docker regapp-deploy.yaml and regapp-service.yaml to eks node
+copy ecr image id and paste in container image of both the files
+
+post build action
+add server
+Jenkins eks node
+/
+
+exec-
+
+kubectl apply -f regapp-deploy.yaml
+kubectl apply -f regapp-service.yaml
+
+build now on Jenkins
+
+kubectl get pod
+kubectl get svc
+
+copy the svc id and paste with :8080
+
+
