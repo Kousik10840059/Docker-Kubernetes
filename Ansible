@@ -92,3 +92,5 @@ node-one
 [prod-server]
 
 node-two
+## For reference website
+https://srivastavayushmaan1347.medium.com/launching-aws-ec2-instances-with-ansible-a-step-by-step-guide-dea9f0be2f65
